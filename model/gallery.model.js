@@ -4,7 +4,7 @@ const GallerySchema = mongoose.Schema({
   path: String,
   src: String,
   alt: String,
-  date: String,
+  date: Date,
   title: String,
 });
 
