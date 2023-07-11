@@ -11,7 +11,11 @@ const getGallery = async (req, res) => {
     } else {
       data = await Gallery.find();
     }
-    res.status(200).json(data);
+    const response = {
+      total: await Gallery.count(),
+      data,
+    };
+    res.status(200).json(response);
   } catch (error) {
     res.status(500).json(error);
   }
