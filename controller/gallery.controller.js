@@ -1,12 +1,12 @@
 const Gallery = require("../model/gallery.model");
 
 const getGallery = async (req, res) => {
-  const { limit, page, size } = req.query;
+  const { page, size } = req.query;
   try {
     let data;
-    if (limit && page && size) {
+    if (page && size) {
       data = await Gallery.find()
-        .limit(Number(limit))
+        .limit(Number(size))
         .skip(Number(page) * Number(size) - Number(size));
     } else {
       data = await Gallery.find();
