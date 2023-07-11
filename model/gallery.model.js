@@ -6,7 +6,6 @@ const GallerySchema = mongoose.Schema({
   alt: String,
   date: Date,
   title: String,
-  images: Array,
 });
 
 module.exports = mongoose.model("gallery", GallerySchema);
