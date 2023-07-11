@@ -22,7 +22,7 @@ const getGallery = async (req, res) => {
 };
 
 const setGallery = async (req, res) => {
-  const { thumbnail, date, title } = req.body;
+  const { images, date, title } = req.body;
 
   const path = title.toLowerCase().replaceAll(" ", "-");
   const alt = `alt-${title.toLowerCase().replaceAll(" ", "-")}`;
@@ -30,7 +30,7 @@ const setGallery = async (req, res) => {
   try {
     const newImage = await Gallery.create({
       path,
-      thumbnail,
+      images,
       alt,
       date,
       title,
