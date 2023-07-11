@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const GallerySchema = mongoose.Schema({
   path: String,
-  src: String,
+  src: Object,
   alt: String,
   date: Date,
   title: String,
