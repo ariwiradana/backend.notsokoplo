@@ -18,7 +18,10 @@ const getGallery = async (req, res) => {
 };
 
 const setGallery = async (req, res) => {
-  const { path, src, alt, date, title } = req.body;
+  const { src, date, title } = req.body;
+
+  const path = title.toLowerCase().replaceAll(" ", "-");
+  const alt = `alt-${title.toLowerCase().replaceAll(" ", "-")}`;
 
   try {
     const newImage = await Gallery.create({ path, src, alt, date, title });
