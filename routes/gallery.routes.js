@@ -6,5 +6,6 @@ const {
   updateGallery,
 } = require("../controller/gallery.controller");
 
-router.route("/").get(getGallery).post(setGallery).put(updateGallery);
+router.route("/").get(getGallery).post(setGallery)
+router.route("/:path").put(updateGallery);
 module.exports = router;
