@@ -22,13 +22,20 @@ const getGallery = async (req, res) => {
 };
 
 const setGallery = async (req, res) => {
-  const { src, date, title } = req.body;
+  const { thumbnail, date, title, images } = req.body;
 
   const path = title.toLowerCase().replaceAll(" ", "-");
   const alt = `alt-${title.toLowerCase().replaceAll(" ", "-")}`;
 
   try {
-    const newImage = await Gallery.create({ path, src, alt, date, title });
+    const newImage = await Gallery.create({
+      path,
+      thumbnail,
+      alt,
+      date,
+      title,
+      images,
+    });
     res.status(200).json(newImage);
   } catch (error) {
     res.status(500).json(error);
