@@ -9,7 +9,9 @@ const getGallery = async (req, res) => {
         .limit(Number(size))
         .skip(Number(page) * Number(size) - Number(size));
     } else {
-      data = await Gallery.find();
+      data = await Gallery.aggregate([
+        { $group: { _id: "$path", count: { $sum: 1 } } },
+      ]);
     }
     const response = {
       total: await Gallery.count(),
