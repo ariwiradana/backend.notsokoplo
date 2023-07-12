@@ -76,11 +76,21 @@ const getGalleryPath = async (req, res) => {
   }
 };
 
+const deleteGallery = async (req, res) => {
+  const { path } = req.params;
+  const response = await Gallery.deleteMany({ path });
+  try {
+    res.status(200).json(response);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+};
+
 const setGallery = async (req, res) => {
   const { image, date, title } = req.body;
 
-  const path = title?.toLowerCase().replaceAll(" ", "-");
-  const alt = `alt-${title?.toLowerCase().replaceAll(" ", "-")}`;
+  const path = title?.toLowerCase().replace(/[^a-z0-9]/gi, "");
+  const alt = `alt-${title?.toLowerCase().replace(/[^a-z0-9]/gi, "")}`;
 
   try {
     const newImage = await Gallery.create({
@@ -127,4 +137,5 @@ module.exports = {
   getGalleryPath,
   setGallery,
   updateGallery,
+  deleteGallery,
 };

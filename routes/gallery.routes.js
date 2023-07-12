@@ -5,8 +5,13 @@ const {
   getGalleryPath,
   setGallery,
   updateGallery,
+  deleteGallery,
 } = require("../controller/gallery.controller");
 
-router.route("/").get(getGallery).post(setGallery)
-router.route("/:path").get(getGalleryPath).put(updateGallery);
+router.route("/").get(getGallery).post(setGallery);
+router
+  .route("/:path")
+  .get(getGalleryPath)
+  .put(updateGallery)
+  .delete(deleteGallery);
 module.exports = router;
