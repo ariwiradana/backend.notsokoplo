@@ -6,9 +6,11 @@ const {
   setGallery,
   updateGallery,
   deleteGallery,
+  setGalleryMulti,
 } = require("../controller/gallery.controller");
 
 router.route("/").get(getGallery).post(setGallery);
+router.route("/multi").post(setGalleryMulti);
 router
   .route("/:path")
   .get(getGalleryPath)

@@ -106,6 +106,17 @@ const setGallery = async (req, res) => {
   }
 };
 
+const setGalleryMulti = async (req, res) => {
+  const body = req.body;
+
+  try {
+    const newImage = await Gallery.insertMany(body);
+    res.status(200).json(newImage);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+};
+
 const updateGallery = async (req, res) => {
   const data = req.body;
   const { path } = req.params;
@@ -138,4 +149,5 @@ module.exports = {
   setGallery,
   updateGallery,
   deleteGallery,
+  setGalleryMulti,
 };
