@@ -10,7 +10,24 @@ const getGallery = async (req, res) => {
         .skip(Number(page) * Number(size) - Number(size));
     } else {
       data = await Gallery.aggregate([
-        { $group: { _id: "$path", count: { $sum: 1 } } },
+        {
+          $group: {
+            _id: "$path",
+            count: { $sum: 1 },
+            someItemsFromLookup: { $push: "$someItemsFromLookup" },
+            first: { $first: "$$ROOT" },
+          },
+        },
+        {
+          $replaceRoot: {
+            newRoot: {
+              $mergeObjects: [
+                "$first",
+                { someItemsFromLookup: "$someItemsFromLookup" },
+              ],
+            },
+          },
+        },
       ]);
     }
     const response = {
