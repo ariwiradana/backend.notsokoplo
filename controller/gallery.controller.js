@@ -4,35 +4,24 @@ const getGallery = async (req, res) => {
   const { page, size } = req.query;
   try {
     let data;
+    let grouped;
     if (page && size) {
       data = await Gallery.find()
         .limit(Number(size))
         .skip(Number(page) * Number(size) - Number(size));
+      grouped = await Gallery.aggregate([
+        { $group: { _id: "$path", count: { $sum: 1 } } },
+      ]);
     } else {
-      data = await Gallery.aggregate([
-        {
-          $group: {
-            _id: "$path",
-            count: { $sum: 1 },
-            someItemsFromLookup: { $push: "$someItemsFromLookup" },
-            first: { $first: "$$ROOT" },
-          },
-        },
-        {
-          $replaceRoot: {
-            newRoot: {
-              $mergeObjects: [
-                "$first",
-                { someItemsFromLookup: "$someItemsFromLookup" },
-              ],
-            },
-          },
-        },
+      data = await Gallery.find();
+      grouped = await Gallery.aggregate([
+        { $group: { _id: "$path", count: { $sum: 1 } } },
       ]);
     }
     const response = {
       total: await Gallery.count(),
       data,
+      grouped,
     };
     res.status(200).json(response);
   } catch (error) {
