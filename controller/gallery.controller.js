@@ -2,17 +2,72 @@ const Gallery = require("../model/gallery.model");
 
 const getGallery = async (req, res) => {
   const { page, size } = req.query;
+
   try {
     let data;
     if (page && size) {
-      data = await Gallery.find()
+      data = await Gallery.aggregate([
+        {
+          $group: {
+            _id: "$path",
+            data: { $first: "$$ROOT" },
+            total: {
+              $sum: 1,
+            },
+          },
+        },
+        {
+          $project: {
+            _id: 0,
+          },
+        },
+      ])
         .limit(Number(size))
         .skip(Number(page) * Number(size) - Number(size));
     } else {
-      data = await Gallery.find();
+      data = await Gallery.aggregate([
+        {
+          $group: {
+            _id: "$path",
+            data: { $first: "$$ROOT" },
+            total: {
+              $sum: 1,
+            },
+          },
+        },
+        {
+          $project: {
+            _id: 0,
+          },
+        },
+      ]);
+    }
+    const total = await Gallery.distinct("path");
+    const response = {
+      total: total?.length,
+      data,
+    };
+    res.status(200).json(response);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+};
+
+const getGalleryPath = async (req, res) => {
+  const { path } = req.params;
+  const { page, size } = req.query;
+
+  try {
+    let data;
+    if (page && size) {
+      data = await Gallery.find({ path })
+        .limit(Number(size))
+        .skip(Number(page) * Number(size) - Number(size));
+    } else {
+      data = await Gallery.find({ path });
     }
     const response = {
-      total: await Gallery.count(),
+      total: await Gallery.count({ path }),
       data,
     };
     res.status(200).json(response);
@@ -24,8 +79,8 @@ const getGallery = async (req, res) => {
 const setGallery = async (req, res) => {
   const { image, date, title } = req.body;
 
-  const path = title.toLowerCase().replaceAll(" ", "-");
-  const alt = `alt-${title.toLowerCase().replaceAll(" ", "-")}`;
+  const path = title?.toLowerCase().replaceAll(" ", "-");
+  const alt = `alt-${title?.toLowerCase().replaceAll(" ", "-")}`;
 
   try {
     const newImage = await Gallery.create({
@@ -69,6 +124,7 @@ const updateGallery = async (req, res) => {
 
 module.exports = {
   getGallery,
+  getGalleryPath,
   setGallery,
   updateGallery,
 };
