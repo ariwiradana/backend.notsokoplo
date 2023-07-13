@@ -10,12 +10,10 @@ const getSlideshow = async (req, res) => {
 };
 
 const setSlideshow = async (req, res) => {
-  const { image } = req.body;
+  const body = req.body;
 
   try {
-    const newImage = await Slideshow.create({
-      image,
-    });
+    const newImage = await Slideshow.insertMany(body);
     res.status(200).json(newImage);
   } catch (error) {
     res.status(500).json(error);
