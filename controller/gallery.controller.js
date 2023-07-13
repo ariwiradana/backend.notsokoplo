@@ -23,7 +23,7 @@ const getGallery = async (req, res) => {
         },
         { $limit: Number(size) },
         { $skip: Number(page) * Number(size) - Number(size) },
-        { $sort: { date: -1 } },
+        { $sort: { $date: -1 } },
       ]);
     } else {
       data = await Gallery.aggregate([
@@ -41,6 +41,7 @@ const getGallery = async (req, res) => {
             _id: 0,
           },
         },
+        { $sort: { $date: -1 } },
       ]);
     }
     const total = await Gallery.distinct("path");
