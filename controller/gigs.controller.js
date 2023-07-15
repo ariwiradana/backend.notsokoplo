@@ -1,9 +1,23 @@
 const Gigs = require("../model/gigs.model");
 
 const getGigs = async (req, res) => {
+  const { page, size } = req.query;
+
   try {
-    const data = await Gigs.find();
-    res.status(200).json(data);
+    let data;
+    if (page && size) {
+      data = await Gigs.find()
+        .limit(Number(size))
+        .skip(Number(page) * Number(size) - Number(size))
+        .sort({ date: 1 });
+    } else {
+      data = await Gigs.find();
+    }
+    const response = {
+      total: await Gigs.count(),
+      data,
+    };
+    res.status(200).json(response);
   } catch (error) {
     res.status(500).json(error);
   }
