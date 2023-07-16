@@ -49,7 +49,7 @@ const getGallery = async (req, res) => {
     };
     res.status(200).json(response);
   } catch (error) {
-    res.status(500).json(error.message);
+    res.status(error.statusCode).json(error.message);
   }
 };
 
@@ -72,7 +72,7 @@ const getGalleryPath = async (req, res) => {
     };
     res.status(200).json(response);
   } catch (error) {
-    res.status(500).json(error.message);
+    res.status(error.statusCode).json(error.message);
   }
 };
 
@@ -82,7 +82,7 @@ const deleteGallery = async (req, res) => {
   try {
     res.status(200).json(response);
   } catch (error) {
-    res.status(500).json(error.message);
+    res.status(error.statusCode).json(error.message);
   }
 };
 
@@ -102,7 +102,7 @@ const setGallery = async (req, res) => {
     });
     res.status(200).json(newImage);
   } catch (error) {
-    res.status(500).json(error.message);
+    res.status(error.statusCode).json(error.message);
   }
 };
 
@@ -113,7 +113,7 @@ const setGalleryMulti = async (req, res) => {
     const newImage = await Gallery.insertMany(body);
     res.status(200).json(newImage);
   } catch (error) {
-    res.status(500).json(error.message);
+    res.status(error.statusCode).json(error.message);
   }
 };
 
@@ -139,7 +139,7 @@ const updateGallery = async (req, res) => {
       }
     );
   } catch (error) {
-    res.status(500).json(error.message);
+    res.status(error.statusCode).json(error.message);
   }
 };
 
