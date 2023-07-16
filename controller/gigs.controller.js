@@ -19,7 +19,11 @@ const getGigs = async (req, res) => {
     };
     res.status(200).json(response);
   } catch (error) {
-    res.status(error.statusCode).json(error.message);
+    if (error.statusCode === 413) {
+      res.status(413).json("Request to large");
+    } else {
+      res.status(error.statusCode).json(error.message);
+    }
   }
 };
 
@@ -29,7 +33,11 @@ const setGigs = async (req, res) => {
     const newGigs = await Gigs.create(body);
     res.status(200).json(newGigs);
   } catch (error) {
-    res.status(error.statusCode).json(error.message);
+    if (error.statusCode === 413) {
+      res.status(413).json("Request to large");
+    } else {
+      res.status(error.statusCode).json(error.message);
+    }
   }
 };
 
@@ -39,7 +47,11 @@ const deleteGigs = async (req, res) => {
   try {
     res.status(200).json(response);
   } catch (error) {
-    res.status(error.statusCode).json(error.message);
+    if (error.statusCode === 413) {
+      res.status(413).json("Request to large");
+    } else {
+      res.status(error.statusCode).json(error.message);
+    }
   }
 };
 
@@ -64,7 +76,11 @@ const updateGigs = async (req, res) => {
       }
     );
   } catch (error) {
-    res.status(error.statusCode).json(error.message);
+    if (error.statusCode === 413) {
+      res.status(413).json("Request to large");
+    } else {
+      res.status(error.statusCode).json(error.message);
+    }
   }
 };
 

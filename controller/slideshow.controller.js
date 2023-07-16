@@ -5,7 +5,11 @@ const getSlideshow = async (req, res) => {
     const data = await Slideshow.find();
     res.status(200).json(data);
   } catch (error) {
-    res.status(error.statusCode).json(error.message);
+    if (error.statusCode === 413) {
+      res.status(413).json("Request to large");
+    } else {
+      res.status(error.statusCode).json(error.message);
+    }
   }
 };
 
@@ -16,7 +20,11 @@ const setSlideshow = async (req, res) => {
     const newImage = await Slideshow.insertMany(body);
     res.status(200).json(newImage);
   } catch (error) {
-    res.status(error.statusCode).json(error.message);
+    if (error.statusCode === 413) {
+      res.status(413).json("Request to large");
+    } else {
+      res.status(error.statusCode).json(error.message);
+    }
   }
 };
 
@@ -26,7 +34,11 @@ const deleteSlideshow = async (req, res) => {
   try {
     res.status(200).json(response);
   } catch (error) {
-    res.status(error.statusCode).json(error.message);
+    if (error.statusCode === 413) {
+      res.status(413).json("Request to large");
+    } else {
+      res.status(error.statusCode).json(error.message);
+    }
   }
 };
 
@@ -51,7 +63,15 @@ const updateSlideshow = async (req, res) => {
       }
     );
   } catch (error) {
-    res.status(error.statusCode).json(error.message);
+    if (error.statusCode === 413) {
+      res.status(413).json("Request to large");
+    } else {
+      if (error.statusCode === 413) {
+      res.status(413).json("Request to large");
+    } else {
+      res.status(error.statusCode).json(error.message);
+    }
+    }
   }
 };
 
