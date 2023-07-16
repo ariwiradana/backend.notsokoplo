@@ -5,7 +5,7 @@ const getSlideshow = async (req, res) => {
     const data = await Slideshow.find();
     res.status(200).json(data);
   } catch (error) {
-    res.status(500).json(error);
+    res.status(500).json(error.message);
   }
 };
 
@@ -16,7 +16,7 @@ const setSlideshow = async (req, res) => {
     const newImage = await Slideshow.insertMany(body);
     res.status(200).json(newImage);
   } catch (error) {
-    res.status(500).json(error);
+    res.status(500).json(error.message);
   }
 };
 
@@ -26,7 +26,7 @@ const deleteSlideshow = async (req, res) => {
   try {
     res.status(200).json(response);
   } catch (error) {
-    res.status(500).json(error);
+    res.status(500).json(error.message);
   }
 };
 
@@ -51,7 +51,7 @@ const updateSlideshow = async (req, res) => {
       }
     );
   } catch (error) {
-    res.status(500).json(error);
+    res.status(500).json(error.message);
   }
 };
 
