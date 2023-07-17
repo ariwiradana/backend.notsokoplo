@@ -1,4 +1,5 @@
 const Gallery = require("../model/gallery.model");
+const GalleryThumbnail = require("../model/gallery.thumbnail.model");
 
 const getGallery = async (req, res) => {
   const { page, size } = req.query;
@@ -84,9 +85,42 @@ const getGalleryPath = async (req, res) => {
   }
 };
 
+const getGalleryThumbnail = async (req, res) => {
+  const { page, size } = req.query;
+
+  try {
+    let data;
+    if (page && size) {
+      data = await GalleryThumbnail.find()
+        .limit(Number(size))
+        .skip(Number(page) * Number(size) - Number(size))
+        .sort({ date: -1 });
+    } else {
+      data = await GalleryThumbnail.find().sort({ date: -1 });
+    }
+    const response = {
+      total: await GalleryThumbnail.count(),
+      data,
+    };
+    res.status(200).json(response);
+  } catch (error) {
+    if (error.statusCode === 413) {
+      res.status(413).json("Request to large");
+    } else {
+      res.status(error.statusCode).json(error.message);
+    }
+  }
+};
+
 const deleteGallery = async (req, res) => {
   const { path } = req.params;
-  const response = await Gallery.deleteMany({ path });
+  const responseData = await Gallery.deleteMany({ path });
+  const responseThumbnail = await GalleryThumbnail.deleteMany({ path });
+
+  const response = {
+    gallery: responseData,
+    thumbnail: responseThumbnail,
+  };
   try {
     res.status(200).json(response);
   } catch (error) {
@@ -106,6 +140,30 @@ const setGallery = async (req, res) => {
 
   try {
     const newImage = await Gallery.create({
+      path,
+      image,
+      alt,
+      date,
+      title,
+    });
+    res.status(200).json(newImage);
+  } catch (error) {
+    if (error.statusCode === 413) {
+      res.status(413).json("Request to large");
+    } else {
+      res.status(error.statusCode).json(error.message);
+    }
+  }
+};
+
+const setGalleryThumbnail = async (req, res) => {
+  const { image, date, title } = req.body;
+
+  const path = title?.toLowerCase().replace(/[^a-z0-9]/gi, "");
+  const alt = `alt-${title?.toLowerCase().replace(/[^a-z0-9]/gi, "")}`;
+
+  try {
+    const newImage = await GalleryThumbnail.create({
       path,
       image,
       alt,
@@ -174,4 +232,6 @@ module.exports = {
   updateGallery,
   deleteGallery,
   setGalleryMulti,
+  setGalleryThumbnail,
+  getGalleryThumbnail,
 };

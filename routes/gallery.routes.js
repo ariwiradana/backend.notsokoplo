@@ -7,10 +7,13 @@ const {
   updateGallery,
   deleteGallery,
   setGalleryMulti,
+  setGalleryThumbnail,
+  getGalleryThumbnail,
 } = require("../controller/gallery.controller");
 
 router.route("/").get(getGallery).post(setGallery);
 router.route("/multi").post(setGalleryMulti);
+router.route("/thumbnail").get(getGalleryThumbnail).post(setGalleryThumbnail);
 router
   .route("/:path")
   .get(getGalleryPath)
