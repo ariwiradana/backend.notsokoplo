@@ -195,43 +195,27 @@ const setGalleryMulti = async (req, res) => {
   }
 };
 
+const updateGalleryThumbnail = async (req, res) => {
+  const data = req.body;
+  const { path } = req.params;
+  try {
+    const result = await GalleryThumbnail.updateOne({ path }, { $set: data });
+    res.status(200).json(result);
+  } catch (error) {
+    if (error.statusCode === 413) {
+      res.status(413).json("Request to large");
+    } else {
+      res.status(error.statusCode).json(error.message);
+    }
+  }
+};
+
 const updateGallery = async (req, res) => {
   const data = req.body;
   const { path } = req.params;
   try {
-    await Gallery.findOneAndUpdate(
-      { path },
-      data,
-      { new: true, strict: false },
-      (err, doc) => {
-        if (err) {
-          res.status(400).json({ error: true, message: err });
-        }
-        if (!doc)
-          res.status(400).json({
-            error: true,
-            message: `data with path ${path} is not found`,
-          });
-      }
-    );
-
-    await GalleryThumbnail.findOneAndUpdate(
-      { path },
-      data,
-      { new: true, strict: false },
-      (err, doc) => {
-        if (err) {
-          res.status(400).json({ error: true, message: err });
-        }
-        if (!doc)
-          res.status(400).json({
-            error: true,
-            message: `data with path ${path} is not found`,
-          });
-
-        res.status(200).json(doc);
-      }
-    );
+    const result = await Gallery.updateOne({ path }, { $set: data });
+    res.status(200).json(result);
   } catch (error) {
     if (error.statusCode === 413) {
       res.status(413).json("Request to large");
@@ -250,4 +234,5 @@ module.exports = {
   setGalleryMulti,
   setGalleryThumbnail,
   getGalleryThumbnail,
+  updateGalleryThumbnail,
 };
