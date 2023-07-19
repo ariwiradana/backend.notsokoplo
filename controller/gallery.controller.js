@@ -199,7 +199,23 @@ const updateGallery = async (req, res) => {
   const data = req.body;
   const { path } = req.params;
   try {
-    Gallery.findOneAndUpdate(
+    await Gallery.findOneAndUpdate(
+      { path },
+      data,
+      { new: true, strict: false },
+      (err, doc) => {
+        if (err) {
+          res.status(400).json({ error: true, message: err });
+        }
+        if (!doc)
+          res.status(400).json({
+            error: true,
+            message: `data with path ${path} is not found`,
+          });
+      }
+    );
+
+    await GalleryThumbnail.findOneAndUpdate(
       { path },
       data,
       { new: true, strict: false },
